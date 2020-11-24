@@ -146,8 +146,9 @@ function isAHoliday() {
     shiftSaturdayHolidays: shiftSaturdayHolidays,
     shiftSundayHolidays: shiftSundayHolidays
   };
-  var allForYear = allFederalHolidaysForYear(year, shift);
-  var nextYear = allFederalHolidaysForYear(year + 1, shift);
+  var customHolidays = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
+  var allForYear = allFederalHolidaysForYear(year, shift, customHolidays);
+  var nextYear = allFederalHolidaysForYear(year + 1, shift, customHolidays);
 
   if (nextYear[0].date.getUTCFullYear() === year) {
     allForYear.push(nextYear[0]);
@@ -170,12 +171,13 @@ function federalHolidaysInRange() {
   var startDate = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new Date();
   var endDate = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : getOneYearFromNow();
   var options = arguments.length > 2 ? arguments[2] : undefined;
+  var customHolidays = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : [];
   var startYear = startDate.getFullYear();
   var endYear = endDate.getFullYear();
   var candidates = [];
 
   for (var year = startYear; year <= endYear; year += 1) {
-    candidates.push.apply(candidates, _toConsumableArray(allFederalHolidaysForYear(year, options)));
+    candidates.push.apply(candidates, _toConsumableArray(allFederalHolidaysForYear(year, options, customHolidays)));
   }
 
   return candidates.filter(function (h) {
