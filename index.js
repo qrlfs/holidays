@@ -41,8 +41,9 @@ function allFederalHolidaysForYear() {
       shiftSaturdayHolidays = _ref$shiftSaturdayHol === void 0 ? true : _ref$shiftSaturdayHol,
       _ref$shiftSundayHolid = _ref.shiftSundayHolidays,
       shiftSundayHolidays = _ref$shiftSundayHolid === void 0 ? true : _ref$shiftSundayHolid;
-
+  
   var holidays = [];
+    
   holidays.push({
     name: "New Year's Day",
     date: new Date(Date.parse("1/1/".concat(year, " GMT")))
@@ -95,10 +96,37 @@ function allFederalHolidaysForYear() {
       }
     });
   }
-
+  // add custom holidays set to add
+  if (arguments.length > 2 && arguments[2] !== undefined) {
+    foreach (h in arguments[2]) {
+      if (h.action == "add") {
+        var ch = new Date(h.date);
+        holidays.push({
+          name: "Custom Holiday",
+          date: new Date(ch.getUTCFullYear(), ch.getUTCMonth(), ch.getUTCDate())
+        });
+      }
+    }
+  }
+  
   holidays.forEach(function (holiday) {
     holiday.dateString = "".concat(holiday.date.getUTCFullYear(), "-").concat(holiday.date.getUTCMonth() + 1, "-").concat(holiday.date.getUTCDate());
   });
+  
+  // remove custom holidays set to remove
+  if (arguments.length > 2 && arguments[2] !== undefined) {
+    holidays = holidays.filter(function(h){
+      var chStr = "";
+      foreach (h in arguments[2]) {
+        if (h.action == "remove") {
+          var ch = new Date(h.date);
+          chStr = "".concat(ch.getUTCFullYear(), "-").concat(ch.getUTCMonth() + 1, "-").concat(ch.getUTCDate());
+        }
+      }
+      return h.dateString != chStr;
+    });
+  }
+  
   return holidays;
 }
 
