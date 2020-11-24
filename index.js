@@ -98,15 +98,15 @@ function allFederalHolidaysForYear() {
   }
   // add custom holidays set to add
   if (arguments.length > 2 && arguments[2] !== undefined) {
-    foreach (h in arguments[2]) {
-      if (h.action == "add") {
-        var ch = new Date(h.date);
+    arguments[2].forEach(function(cust){
+      if (cust.action == "add") {
+        var ch = new Date(cust.date);
         holidays.push({
           name: "Custom Holiday",
           date: new Date(ch.getUTCFullYear(), ch.getUTCMonth(), ch.getUTCDate())
         });
       }
-    }
+    });    
   }
   
   holidays.forEach(function (holiday) {
@@ -114,16 +114,20 @@ function allFederalHolidaysForYear() {
   });
   
   // remove custom holidays set to remove
-  if (arguments.length > 2 && arguments[2] !== undefined) {
+  if (arguments.length > 2 && arguments[2] !== undefined) {  
     holidays = holidays.filter(function(h){
-      var chStr = "";
-      foreach (h in arguments[2]) {
-        if (h.action == "remove") {
-          var ch = new Date(h.date);
+      var validHoliday = true;
+      arguments[2].forEach(function(cust) {
+        var chStr = "";
+        if (cust.action == "remove") {
+          var ch = new Date(cust.date);
           chStr = "".concat(ch.getUTCFullYear(), "-").concat(ch.getUTCMonth() + 1, "-").concat(ch.getUTCDate());
         }
-      }
-      return h.dateString != chStr;
+        if (chStr == h.dateString) {
+          validHoliday = false;
+        } 
+      });
+      return validHoliday;      
     });
   }
   
