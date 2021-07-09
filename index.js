@@ -59,6 +59,10 @@ function allFederalHolidaysForYear() {
   holidays.push({
     name: "Memorial Day",
     date: getLastDayOf(1, 5, year)
+  });  
+  holidays.push({
+    name: "Juneteenth",
+    date: new Date(Date.parse("6/19/".concat(year, " GMT")))
   });
   holidays.push({
     name: "Independence Day",
